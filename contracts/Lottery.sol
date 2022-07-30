@@ -6,6 +6,11 @@ contract Lottery {
   address public manager;
   address payable[] public players;
 
+  modifier restricted() {
+    require(msg.sender == manager);
+    _;
+  }
+
   constructor() {
     manager = msg.sender;
   }
@@ -28,10 +33,5 @@ contract Lottery {
 
   function random() private view returns (uint) {
     return uint(keccak256(abi.encode(block.difficulty, block.timestamp, players)));
-  }
-
-  modifier restricted() {
-    require(msg.sender == manager);
-    _;
   }
 }
